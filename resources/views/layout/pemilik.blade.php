@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title')</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @yield('scripts')
+    <!-- Add this to allow per-page script injection -->
+
+    <style>
+    /* Custom styles */
+    .gradient-bg {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    }
+
+    .sidebar {
+        transition: all 0.3s ease;
+    }
+
+    .input-highlight {
+        transition: all 0.3s ease;
+    }
+
+    .input-highlight:focus {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
+
+    .modal {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .modal-hidden {
+        opacity: 0;
+        transform: scale(0.9);
+        pointer-events: none;
+    }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-hammer text-2xl"></i>
+                <span class="text-xl font-bold">BuildMaster</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-blue-200 transition">Home</a>
+                <a href="#" class="hover:text-blue-200 transition">Products</a>
+                <a href="#" class="hover:text-blue-200 transition">Categories</a>
+                <a href="#" class="hover:text-blue-200 transition">About</a>
+                <a href="#" class="hover:text-blue-200 transition">Contact</a>
+            </div>
+            <div class="flex items-center space-x-4">
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="px-4 py-2 border border-white rounded-md font-medium hover:bg-blue-700 transition">
+                        Logout
+                    </button>
+                </form>
+
+
+                <button class="md:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="sidebar w-64 bg-white shadow-md h-screen sticky top-0 hidden md:block">
+            <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold">Categories</h2>
+            </div>
+            <ul class="py-2">
+                <li>
+                    <a href="{{ route('dashboard') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 font-medium {{ request()->routeIs('dashboard') ? 'text-blue-800 bg-blue-100' : '' }}">
+                        <i class="fas fa-tools mr-2"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('materials.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('materials.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <i class="fas fa-boxes mr-2"></i> Building Materials
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
+                        <i class="fas fa-bolt mr-2"></i> Electrical
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
+                        <i class="fas fa-faucet mr-2"></i> Plumbing
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
+                        <i class="fas fa-paint-roller mr-2"></i> Paint & Decor
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
+                        <i class="fas fa-tree mr-2"></i> Timber
+                    </a>
+                </li>
+            </ul>
+            <div class="p-4 border-t">
+                <h2 class="text-lg font-semibold">Filters</h2>
+                <div class="mt-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded text-blue-600">
+                        <span class="ml-2">In Stock</span>
+                    </label>
+                    <label class="flex items-center mt-2">
+                        <input type="checkbox" class="rounded text-blue-600">
+                        <span class="ml-2">On Sale</span>
+                    </label>
+                </div>
+                <div class="mt-4">
+                    <h3 class="font-medium">Price Range</h3>
+                    <input type="range" class="w-full mt-2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="flex-1 p-6">
+            @yield('content')
+        </div>
+    </div>
+    <footer class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">BuildMaster</h3>
+                    <p class="text-blue-200">Your one-stop shop for all construction and building materials. Quality
+                        products at competitive prices.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-200 transition">Home</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Products</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Categories</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-200 transition">Tools</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Building Materials</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Electrical</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Plumbing</a></li>
+                        <li><a href="#" class="hover:text-blue-200 transition">Paint & Decor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Contact Us</h4>
+                    <address class="not-italic">
+                        <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> 123 Builder St, Construction City</p>
+                        <p class="mb-2"><i class="fas fa-phone mr-2"></i> (123) 456-7890</p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2"></i> info@buildmaster.com</p>
+                    </address>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-blue-700 mt-8 pt-6 text-center text-sm text-blue-200">
+                <p>&copy; 2023 BuildMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Modal functionality
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const loginCloseBtn = document.getElementById('loginCloseBtn');
+    const registerCloseBtn = document.getElementById('registerCloseBtn');
+    const switchToRegister = document.getElementById('switchToRegister');
+    const switchToLogin = document.getElementById('switchToLogin');
+
+    function toggleModal(modal) {
+        modal.classList.toggle('opacity-0');
+        modal.classList.toggle('modal-hidden');
+        document.body.classList.toggle('overflow-hidden');
+    }
+
+    loginBtn.addEventListener('click', () => {
+        toggleModal(loginModal);
+    });
+
+    registerBtn.addEventListener('click', () => {
+        toggleModal(registerModal);
+    });
+
+    loginCloseBtn.addEventListener('click', () => {
+        toggleModal(loginModal);
+    });
+
+    registerCloseBtn.addEventListener('click', () => {
+        toggleModal(registerModal);
+    });
+
+    switchToRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleModal(loginModal);
+        setTimeout(() => toggleModal(registerModal), 300);
+    });
+
+    switchToLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleModal(registerModal);
+        setTimeout(() => toggleModal(loginModal), 300);
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+            toggleModal(loginModal);
+        }
+        if (e.target === registerModal) {
+            toggleModal(registerModal);
+        }
+    });
+
+    // Sample inventory data (would normally come from API)
+    const inventoryData = [{
+            id: 'BM-1001',
+            name: 'Concrete Mix 50lb',
+            category: 'Building Materials',
+            stock: 48,
+            price: 12.99,
+            status: 'Active'
+        },
+        {
+            id: 'BM-1002',
+            name: 'Drywall Sheet 4x8',
+            category: 'Building Materials',
+            stock: 5,
+            price: 15.49,
+            status: 'Active'
+        },
+        {
+            id: 'BM-1003',
+            name: 'Roofing Shingles',
+            category: 'Building Materials',
+            stock: 0,
+            price: 34.99,
+            status: 'Inactive'
+        },
+        // More items would be here in a real application
+    ];
+
+    // This would be used to dynamically populate the inventory table
+    function populateInventoryTable() {
+        // In a real app, this would fetch data and update the table
+        console.log('Inventory data loaded:', inventoryData);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        populateInventoryTable();
+    });
+    </script>
+</body>
+
+</html>

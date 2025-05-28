@@ -1,12 +1,12 @@
 @extends('layout.pemilik')
 
-@section('title', 'Buildin Materials')
+@section('title', 'Buildin Electricals')
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Building Materials</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Building Electricals</h1>
     <div class="flex space-x-2">
-        <form method="GET" action="{{ route('materials.index') }}" class="inline">
+        <form method="GET" action="{{ route('electricals.index') }}" class="inline">
             <select name="sort" onchange="this.form.submit()" class="border rounded-md px-3 py-2">
                 <option value="">Sort by: Featured</option>
                 <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High
@@ -25,13 +25,13 @@
     </div>
 </div>
 
-@foreach ($Materials as $Material)
+@foreach ($Electricals as $electrical)
 
 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Inventory Management</h2>
-        <form action="{{ route('materials.index') }}" method="GET" class="flex items-center space-x-2">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Materials..."
+        <form action="{{ route('electricals.index') }}" method="GET" class="flex items-center space-x-2">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Electricals..."
                 class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring focus:ring-blue-200 focus:border-blue-400">
             <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
                 <i class="fas fa-search mr-1"></i> Search
@@ -61,17 +61,18 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         BM-{{ str_pad($loop->iteration, 4, '0', STR_PAD_LEFT) }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $Material->name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $electrical->name }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">{{ $Material->stock }}
+                        <span
+                            class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">{{ $electrical->stock }}
                             in stock</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Rp{{ number_format($Material->price, 0, ',', '.') }}
+                        Rp{{ number_format($electrical->price, 0, ',', '.') }}
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        @if ($Material->status)
+                        @if ($electrical->status)
                         <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Active</span>
                         @else
                         <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">Inactive</span>
@@ -79,12 +80,12 @@
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <button onclick="openModalEdit('{{ $Material->id }}')"
+                        <button onclick="openModalEdit('{{ $electrical->id }}')"
                             class="text-blue-600 hover:text-blue-900 mr-3">
                             <i class="fas fa-edit"></i>
                         </button>
 
-                        <form action="{{ route('materials.destroy', $Material->id) }}" method="POST" class="inline">
+                        <form action="{{ route('electricals.destroy', $electrical->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900"
@@ -100,26 +101,26 @@
     </div>
     <div class="flex justify-between items-center mt-4">
         <div class="text-sm text-gray-500">
-            Showing {{ $Materials->firstItem() }} to {{ $Materials->lastItem() }} of {{ $Materials->total() }}
+            Showing {{ $Electricals->firstItem() }} to {{ $Electricals->lastItem() }} of {{ $Electricals->total() }}
             entries
         </div>
 
         <div class="flex space-x-1">
-            @if ($Materials->onFirstPage())
+            @if ($Electricals->onFirstPage())
             <span class="px-3 py-1 border rounded-md text-sm text-gray-400">Previous</span>
             @else
-            <a href="{{ $Materials->previousPageUrl() }}" class="px-3 py-1 border rounded-md text-sm">Previous</a>
+            <a href="{{ $Electricals->previousPageUrl() }}" class="px-3 py-1 border rounded-md text-sm">Previous</a>
             @endif
 
-            @for ($i = 1; $i <= $Materials->lastPage(); $i++)
-                <a href="{{ $Materials->url($i) }}"
-                    class="px-3 py-1 border rounded-md text-sm {{ $Materials->currentPage() == $i ? 'bg-blue-600 text-white' : '' }}">
+            @for ($i = 1; $i <= $Electricals->lastPage(); $i++)
+                <a href="{{ $Electricals->url($i) }}"
+                    class="px-3 py-1 border rounded-md text-sm {{ $Electricals->currentPage() == $i ? 'bg-blue-600 text-white' : '' }}">
                     {{ $i }}
                 </a>
                 @endfor
 
-                @if ($Materials->hasMorePages())
-                <a href="{{ $Materials->nextPageUrl() }}" class="px-3 py-1 border rounded-md text-sm">Next</a>
+                @if ($Electricals->hasMorePages())
+                <a href="{{ $Electricals->nextPageUrl() }}" class="px-3 py-1 border rounded-md text-sm">Next</a>
                 @else
                 <span class="px-3 py-1 border rounded-md text-sm text-gray-400">Next</span>
                 @endif
@@ -134,7 +135,7 @@
     <div
         class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition transform hover:-translate-y-1 duration-300 animate-fade-in delay-100">
         <div class="relative">
-            <img src="{{ asset('storage/' . $Material->path) }}" alt="Product" class="w-full h-48 object-cover">
+            <img src="{{ asset('storage/' . $electrical->path) }}" alt="Product" class="w-full h-48 object-cover">
             <div
                 class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded animate-bounce">
                 SALE
@@ -144,24 +145,24 @@
         <div class="p-4">
             <div class="flex justify-between items-start">
                 <div>
-                    <h3 class="font-bold text-lg mb-1">{{ $Material->name }}</h3>
-                    <p class="text-gray-600 text-sm">{{ $Material->description }}</p>
+                    <h3 class="font-bold text-lg mb-1">{{ $electrical->name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ $electrical->description }}</p>
                 </div>
                 <div class="text-right">
                     <span
-                        class="text-blue-600 font-bold block">Rp{{ number_format($Material->price, 0, ',', '.') }}</span>
+                        class="text-blue-600 font-bold block">Rp{{ number_format($electrical->price, 0, ',', '.') }}</span>
                 </div>
             </div>
             <div class="mt-3 flex justify-between items-center">
                 <div>
-                    @if ($Material->stock < 5) <span class="text-yellow-600 text-sm font-medium">
+                    @if ($electrical->stock < 5) <span class="text-yellow-600 text-sm font-medium">
                         <i class="fas fa-exclamation-circle mr-1"></i>
-                        Low Stock ({{ $Material->stock }})
+                        Low Stock ({{ $electrical->stock }})
                         </span>
                         @else
                         <span class="text-green-600 text-sm font-medium">
                             <i class="fas fa-check-circle mr-1"></i>
-                            In Stock ({{ $Material->stock }})
+                            In Stock ({{ $electrical->stock }})
                         </span>
                         @endif
                 </div>
@@ -174,34 +175,34 @@
 
 </div>
 <!-- Modal Overlay Edit -->
-<div id="editProductModal-{{ $Material->id }}"
+<div id="editProductModal-{{ $electrical->id }}"
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
     <!-- Modal Box -->
     <div class="bg-white w-full max-w-lg p-6 rounded-xl shadow-lg relative">
         <h2 class="text-xl font-semibold mb-4">Edit Product</h2>
 
-        <form action="{{ route('materials.update', $Material->id) }}" method="POST" enctype="multipart/form-data"
+        <form action="{{ route('electricals.update', $electrical->id) }}" method="POST" enctype="multipart/form-data"
             class="space-y-4">
             @csrf
             @method('PUT')
 
             <div>
                 <label for="name" class="block font-medium text-md text-gray-700">Name</label>
-                <input type="text" name="name" value="{{ $Material->name }}" id="name" required
+                <input type="text" name="name" value="{{ $electrical->name }}" id="name" required
                     placeholder="Enter product name"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">
             </div>
 
             <div>
                 <label for="stock" class="block font-medium text-md text-gray-700">Stock</label>
-                <input type="number" name="stock" value="{{ $Material->stock }}" id="stock" required
+                <input type="number" name="stock" value="{{ $electrical->stock }}" id="stock" required
                     placeholder="Enter stock quantity"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">
             </div>
 
             <div>
                 <label for="price" class="block font-medium text-md text-gray-700">Price</label>
-                <input type="number" name="price" id="editPrice" value="{{ $Material->price }}" step="0.01" required
+                <input type="number" name="price" id="editPrice" value="{{ $electrical->price }}" step="0.01" required
                     placeholder="Enter product price"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">
 
@@ -211,15 +212,15 @@
             <div>
                 <label for="description" class="block font-medium text-md text-gray-700">Description</label>
                 <textarea name="description" id="description" rows="3" placeholder="Enter product description"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">{{ $Material->description }}</textarea>
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">{{ $electrical->description }}</textarea>
             </div>
             <div>
                 <label for="status" class="block font-medium text-md text-gray-700">Status</label>
                 <select name="status" id="status" required
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">
                     <option value="">-- Choose status --</option>
-                    <option value="1" {{ $Material->status == 1 ? 'selected' : '' }}>Active</option>
-                    <option value="0" {{ $Material->status == 0 ? 'selected' : '' }}>Inactive</option>
+                    <option value="1" {{ $electrical->status == 1 ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ $electrical->status == 0 ? 'selected' : '' }}>Inactive</option>
 
                 </select>
             </div>
@@ -231,7 +232,7 @@
             </div>
 
             <div class="flex justify-end space-x-2 mt-4">
-                <button type="button" onclick="closeModalEdit('{{ $Material->id }}')"
+                <button type="button" onclick="closeModalEdit('{{ $electrical->id }}')"
                     class="px-5 py-3 bg-gray-200 rounded hover:bg-gray-300 text-md">Cancel</button>
                 <button type="submit"
                     class="px-5 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 text-md">Save</button>
@@ -239,7 +240,7 @@
         </form>
 
         <!-- Close Button -->
-        <button onclick="closeModalEdit('{{ $Material->id }}')"
+        <button onclick="closeModalEdit('{{ $electrical->id }}')"
             class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
     </div>
 </div>
@@ -250,7 +251,7 @@
     <div class="bg-white w-full max-w-lg p-6 rounded-xl shadow-lg relative">
         <h2 class="text-xl font-semibold mb-4">Add Product</h2>
 
-        <form action="{{ route('materials.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('electricals.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <div>

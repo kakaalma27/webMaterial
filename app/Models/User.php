@@ -33,7 +33,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = ['profile_photo_url'];
     /**
      * The attributes that should be cast.
      *

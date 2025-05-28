@@ -85,34 +85,60 @@
                 <li>
                     <a href="{{ route('dashboard') }}"
                         class="block px-4 py-2 hover:bg-blue-50 font-medium {{ request()->routeIs('dashboard') ? 'text-blue-800 bg-blue-100' : '' }}">
-                        <i class="fas fa-tools mr-2"></i> Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('materials.index') }}"
-                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('materials.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
-                        <i class="fas fa-boxes mr-2"></i> Building Materials
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l9-9 9 9v9a2 2 0 01-2 2h-4a2 2 0 01-2-2v-4H9v4a2 2 0 01-2 2H3a2 2 0 01-2-2v-9z" />
+                        </svg>
+                        Dashboard
                     </a>
                 </li>
 
                 <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
-                        <i class="fas fa-bolt mr-2"></i> Electrical
+                    <a href="{{ route('materials.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('materials.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 7h18M3 12h18M3 17h18" />
+                        </svg>
+                        Building Materials
                     </a>
                 </li>
+
                 <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
-                        <i class="fas fa-faucet mr-2"></i> Plumbing
+                    <a href="{{ route('electricals.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('electricals.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Electrical
                     </a>
                 </li>
+
                 <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
-                        <i class="fas fa-paint-roller mr-2"></i> Paint & Decor
+                    <a href="{{ route('plumbings.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('plumbings.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6M12 3v4m0 0a4 4 0 01-4 4m4-4a4 4 0 014 4" />
+                        </svg>
+                        Plumbing
                     </a>
                 </li>
+
                 <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-blue-50">
-                        <i class="fas fa-tree mr-2"></i> Timber
+                    <a href="{{ route('paints.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('paints.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 10l4.553-4.553a1 1 0 000-1.414l-2.586-2.586a1 1 0 00-1.414 0L11 6.586M4 20h16M4 20l4.879-4.879a3 3 0 014.242 0L20 20" />
+                        </svg>
+                        Paint & Decor
                     </a>
                 </li>
             </ul>

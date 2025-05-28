@@ -8,42 +8,39 @@ use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
 {
-public function index(Request $request)
-{
-    $query = Material::query();
+    public function index(Request $request)
+    {
+        $user_id = auth()->id();
 
-    // Optional search
-    if ($request->has('search')) {
-        $query->where('name', 'like', '%' . $request->search . '%');
+        $query = Material::query()->where('user_id', $user_id); // Filter berdasarkan user yang login
+
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        switch ($request->sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                $query->latest();
+                break;
+        }
+
+        $Materials = $query->paginate(10)->withQueryString();
+
+        return view('main.material.index', compact('Materials'));
     }
-
-    // Sorting
-    switch ($request->sort) {
-        case 'price_asc':
-            $query->orderBy('price', 'asc');
-            break;
-        case 'price_desc':
-            $query->orderBy('price', 'desc');
-            break;
-        case 'newest':
-            $query->orderBy('created_at', 'desc');
-            break;
-        default:
-            $query->latest(); // default sorting
-            break;
-    }
-
-    $materials = $query->paginate(10)->withQueryString();
-
-    return view('main.material.index', compact('materials'));
-}
-
-
-
 
     public function create()
     {
-        return view('materials.create');
+        return view('main.material');
     }
 
     public function store(Request $request)
@@ -57,9 +54,10 @@ public function index(Request $request)
             'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $path = $request->file('image')->store('materials', 'public');
-
+        $path = $request->file('image')->store('Materials', 'public');
+        $user_id = auth()->id();
         Material::create([
+            'user_id' => $user_id,
             'name' => $validated['name'],
             'stock' => $validated['stock'],
             'price' => $validated['price'],
@@ -73,19 +71,19 @@ public function index(Request $request)
 
     public function show($id)
     {
-        $material = Material::findOrFail($id);
-        return view('materials.show', compact('material'));
+        $Material = Material::findOrFail($id);
+        return view('main.material', compact('Material'));
     }
 
     public function edit($id)
     {
-        $material = Material::findOrFail($id);
-        return view('materials.edit', compact('material'));
+        $Material = Material::findOrFail($id);
+        return view('main.material', compact('Material'));
     }
 
     public function update(Request $request, $id)
     {
-        $material = Material::findOrFail($id);
+        $Material = Material::findOrFail($id);
 
         $validated = $request->validate([
             'name' => 'required|string',
@@ -96,24 +94,24 @@ public function index(Request $request)
         ]);
 
         if ($request->hasFile('image')) {
-            if ($material->path && Storage::disk('public')->exists($material->path)) {
-                Storage::disk('public')->delete($material->path);
+            if ($Material->path && Storage::disk('public')->exists($Material->path)) {
+                Storage::disk('public')->delete($Material->path);
             }
-            $validated['path'] = $request->file('image')->store('electricals', 'public');
+            $validated['path'] = $request->file('image')->store('Materials', 'public');
         }
 
-        $material->update($validated);
+        $Material->update($validated);
 
         return redirect()->route('materials.index')->with('success', 'Material updated successfully.');
     }
 
     public function destroy($id)
     {
-        $material = Material::findOrFail($id);
-        if ($material->path && Storage::disk('public')->exists($material->path)) {
-            Storage::disk('public')->delete($material->path);
+        $Material = Material::findOrFail($id);
+        if ($Material->path && Storage::disk('public')->exists($Material->path)) {
+            Storage::disk('public')->delete($Material->path);
         }
-        $material->delete();
+        $Material->delete();
 
         return redirect()->route('materials.index')->with('success', 'Material deleted successfully.');
     }

@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Material extends Model
 {
     use HasFactory;
-            protected $fillable = [
+    protected $fillable = [
+        'user_id',
         'name',
         'stock',
         'price',
-        'description',
         'status',
+        'description',
         'path'
     ];
 }

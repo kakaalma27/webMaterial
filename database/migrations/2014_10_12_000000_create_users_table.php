@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->tinyInteger('role')->default(0);
+                  $table->string('profile_photo_path', 2048)->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

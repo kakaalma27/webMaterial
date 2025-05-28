@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Electrical extends Model
 {
     use HasFactory;
-        protected $fillable = [
+    protected $fillable = [
+        'user_id',
         'name',
         'stock',
         'price',
         'status',
+        'description',
         'path'
     ];
 }

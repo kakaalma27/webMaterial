@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="p-4 space-y-6">
-    <!-- Monthly Sales Full Width -->
+    <!-- Monthly Sales -->
     <div class="bg-white rounded-2xl shadow p-4 w-full">
         <h2 class="text-xl font-semibold text-gray-800 mb-2">Monthly Sales</h2>
         <div class="chart-container h-64">
@@ -12,12 +12,12 @@
         </div>
     </div>
 
-    <!-- Daily & Weekly Side by Side -->
+    <!-- Daily & Weekly -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Daily Sales -->
         <div class="bg-white rounded-2xl shadow p-4">
             <h2 class="text-xl font-semibold text-gray-800 mb-2">Daily Sales (Last 7 Days)</h2>
-            <div class="chart-container">
+            <div class="chart-container h-64">
                 <canvas id="dailyChart"></canvas>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <!-- Weekly Sales -->
         <div class="bg-white rounded-2xl shadow p-4">
             <h2 class="text-xl font-semibold text-gray-800 mb-2">Weekly Sales (Last 4 Weeks)</h2>
-            <div class="chart-container">
+            <div class="chart-container h-64">
                 <canvas id="weeklyChart"></canvas>
             </div>
         </div>
@@ -33,21 +33,47 @@
 </div>
 
 <script>
-// Wait for the DOM to be fully loaded
+// Monthly income: normalize to full 12 months (Jan to Dec)
+const rawMonthly = @json($monthlyIncome->toArray());
+const monthlyIncome = Array.from({
+    length: 12
+}, (_, i) => rawMonthly[i + 1] || 0);
+
+// Daily
+const rawDailyIncome = @json($dailyIncome->toArray());
+const dailyLabels = [];
+const dailyData = [];
+for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const isoDate = date.toISOString().slice(0, 10);
+    dailyLabels.push(isoDate);
+    dailyData.push(rawDailyIncome[isoDate] ?? 0);
+}
+
+// Weekly
+const rawWeeklyIncome = @json($weeklyIncome);
+const weeklyLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+const weeklyData = weeklyLabels.map((_, idx) => rawWeeklyIncome[idx + 1] ?? 0);
+
+</script>
+
+<!-- Chart.js CDN (jika belum ada) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart Initialization -->
+<script>
 document.addEventListener('DOMContentLoaded', function() {
     // Monthly Chart
-    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-    const monthlyChart = new Chart(monthlyCtx, {
+    new Chart(document.getElementById('monthlyChart').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
-                'Dec'
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+                'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             ],
             datasets: [{
                 label: 'Monthly Income',
-                data: [12000, 19000, 15000, 18000, 22000, 25000, 23000, 21000, 24000, 26000,
-                    28000, 30000
-                ],
+                data: monthlyIncome,
                 backgroundColor: 'rgba(59, 130, 246, 0.7)',
                 borderColor: 'rgba(59, 130, 246, 1)',
                 borderWidth: 1
@@ -60,33 +86,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: function(value) {
-                            return 'Rp' + value.toLocaleString();
-                        }
+                        callback: value => 'Rp' + value.toLocaleString('id-ID')
                     }
                 }
             },
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
-                            return 'Income: Rp' + context.raw.toLocaleString();
-                        }
+                        label: context => 'Income: Rp' + context.raw.toLocaleString('id-ID')
                     }
                 }
             }
         }
     });
 
-    // Daily Chart (Last 7 days)
-    const dailyCtx = document.getElementById('dailyChart').getContext('2d');
-    const dailyChart = new Chart(dailyCtx, {
+    // Daily Chart
+    new Chart(document.getElementById('dailyChart').getContext('2d'), {
         type: 'line',
         data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            labels: dailyLabels,
             datasets: [{
                 label: 'Daily Income',
-                data: [900, 1200, 800, 1100, 1500, 2000, 1800],
+                data: dailyData,
                 backgroundColor: 'rgba(16, 185, 129, 0.2)',
                 borderColor: 'rgba(16, 185, 129, 1)',
                 borderWidth: 2,
@@ -101,45 +122,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: function(value) {
-                            return 'Rp' + value.toLocaleString();
-                        }
+                        callback: value => 'Rp' + value.toLocaleString('id-ID')
                     }
                 }
             },
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
-                            return 'Income: Rp' + context.raw.toLocaleString();
-                        }
+                        label: context => 'Income: Rp' + context.raw.toLocaleString('id-ID')
                     }
                 }
             }
         }
     });
 
-    // Weekly Chart (Last 4 weeks)
-    const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
-    const weeklyChart = new Chart(weeklyCtx, {
+    // Weekly Chart
+    new Chart(document.getElementById('weeklyChart').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            labels: weeklyLabels,
             datasets: [{
                 label: 'Weekly Income',
-                data: [8500, 9200, 7800, 10500],
-                backgroundColor: [
-                    'rgba(245, 158, 11, 0.7)',
-                    'rgba(234, 88, 12, 0.7)',
-                    'rgba(220, 38, 38, 0.7)',
-                    'rgba(139, 92, 246, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(245, 158, 11, 1)',
-                    'rgba(234, 88, 12, 1)',
-                    'rgba(220, 38, 38, 1)',
-                    'rgba(139, 92, 246, 1)'
-                ],
+                data: weeklyData,
+                backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                borderColor: 'rgba(245, 158, 11, 1)',
                 borderWidth: 1
             }]
         },
@@ -150,18 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: function(value) {
-                            return 'Rp' + value.toLocaleString();
-                        }
+                        callback: value => 'Rp' + value.toLocaleString('id-ID')
                     }
                 }
             },
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
-                            return 'Income: Rp' + context.raw.toLocaleString();
-                        }
+                        label: context => 'Income: Rp' + context.raw.toLocaleString('id-ID')
                     }
                 }
             }

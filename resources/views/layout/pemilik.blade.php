@@ -12,6 +12,10 @@
     <!-- Add this to allow per-page script injection -->
 
     <style>
+    [x-cloak] {
+        display: none;
+    }
+
     /* Custom styles */
     .gradient-bg {
         background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
@@ -39,20 +43,50 @@
         pointer-events: none;
     }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-blue-50 font-sans">
     <!-- Navigation -->
-    <nav class="gradient-bg text-white shadow-lg">
+    <nav class="bg-white shadow-md">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <i class="fas fa-hammer text-2xl"></i>
-                <span class="text-xl font-bold">BuildMaster</span>
+                <a href="{{ url('/admin/dashboard') }}">
+                    <div class="flex items-center w-14 h-14 space-x-2">
+                        <img src="{{ asset('try.png') }}" class="w-15 h-15 text-2xl" alt="">
+                    </div>
+                </a>
             </div>
             <div class="hidden md:flex space-x-6">
-                <a href="#" class="hover:text-blue-200 transition">Home</a>
-                <a href="#" class="hover:text-blue-200 transition">Products</a>
-                <a href="#" class="hover:text-blue-200 transition">Categories</a>
+                <a href="{{ url('/admin/dashboard') }}" class="hover:text-blue-200 transition">Home</a>
+                <div x-data="{ open: false }" class="relative inline-block">
+                    <button @click="open = !open" class="hover:text-blue-200 transition">Products</button>
+
+                    <div x-show="open" x-cloak @click.away="open = false"
+                        class="absolute bg-white shadow-lg mt-2 rounded-lg z-10" x-transition>
+                        <ul class="py-2 w-40">
+                            <li>
+                                <a href="{{ route('materials.index') }}" @click="open = false"
+                                    class="block px-4 py-2 text-blue-700 hover:text-white hover:bg-blue-500">Materials</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('electricals.index') }}" @click="open = false"
+                                    class="block px-4 py-2 text-blue-700 hover:text-white hover:bg-blue-500">Electricals</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('plumbings.index') }}" @click="open = false"
+                                    class="block px-4 py-2 text-blue-700 hover:text-white hover:bg-blue-500">Plumbings</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('paints.index') }}" @click="open = false"
+                                    class="block px-4 py-2 text-blue-700 hover:text-white hover:bg-blue-500">Paint &
+                                    Decor</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <a href="#" class="hover:text-blue-200 transition">About</a>
                 <a href="#" class="hover:text-blue-200 transition">Contact</a>
             </div>
@@ -93,6 +127,28 @@
                         Dashboard
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.history') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('payment.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 14l2-2 4 4m1-9h.01M6 3h12a1 1 0 011 1v16a1 1 0 01-1.447.894L12 18l-5.553 2.894A1 1 0 015 20V4a1 1 0 011-1z" />
+                        </svg>
+                        History of Sales
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('payment.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('payment.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 9V7a2 2 0 00-2-2H9a2 2 0 00-2 2v2m10 0v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9m10 0H5" />
+                        </svg>
+                        Payment
+                    </a>
+                </li>
 
                 <li>
                     <a href="{{ route('materials.index') }}"
@@ -114,7 +170,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        Electrical
+                        Building Electricals
                     </a>
                 </li>
 
@@ -126,7 +182,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6M12 3v4m0 0a4 4 0 01-4 4m4-4a4 4 0 014 4" />
                         </svg>
-                        Plumbing
+                        Building Plumbings
                     </a>
                 </li>
 
@@ -138,25 +194,22 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 10l4.553-4.553a1 1 0 000-1.414l-2.586-2.586a1 1 0 00-1.414 0L11 6.586M4 20h16M4 20l4.879-4.879a3 3 0 014.242 0L20 20" />
                         </svg>
-                        Paint & Decor
+                        Building Paint & Decor
                     </a>
                 </li>
             </ul>
             <div class="p-4 border-t">
-                <h2 class="text-lg font-semibold">Filters</h2>
+                <h2 class="text-lg font-semibold">Account</h2>
                 <div class="mt-2">
-                    <label class="flex items-center">
-                        <input type="checkbox" class="rounded text-blue-600">
-                        <span class="ml-2">In Stock</span>
-                    </label>
-                    <label class="flex items-center mt-2">
-                        <input type="checkbox" class="rounded text-blue-600">
-                        <span class="ml-2">On Sale</span>
-                    </label>
-                </div>
-                <div class="mt-4">
-                    <h3 class="font-medium">Price Range</h3>
-                    <input type="range" class="w-full mt-2">
+                    <a href="{{ route('user') }}"
+                        class="block py-2 hover:bg-blue-50 {{ request()->routeIs('user.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        User Management
+                    </a>
                 </div>
             </div>
         </div>

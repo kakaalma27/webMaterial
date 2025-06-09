@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaintController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\PlumbingController;
 use App\Http\Controllers\ElectricalController;
+use App\Http\Controllers\PaymentHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,11 +29,27 @@ Route::get('/', function () {
         : view('auth.login'); 
 })->name('login')->middleware('guest');
 Route::post('/do-login', [UserController::class, 'authenticate'])->name('do-login');
-Route::get('/register', [UserController::class, 'register'])->name('register'); // shows form
-Route::post('/do-register', [UserController::class, 'store'])->name('do-register'); // processes form
+Route::get('/register', [UserController::class, 'register'])->name('register'); 
+Route::post('/do-register', [UserController::class, 'store'])->name('do-register'); 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('dashboard');
+Route::get('/admin/user', [UserController::class, 'user'])->name('user');
+Route::put('/admin/user/update/{id}', [UserController::class, 'update'])->name('user.update');
+Route::delete('/admin/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::get('/admin/history', [PaymentHistoryController::class, 'salesHistory'])->name('admin.history');
+Route::get('/admin/export/pdf', [PaymentHistoryController::class, 'exportExcel'])->name('admin.excel');
+Route::get('/admin/export/excel', [PaymentHistoryController::class, 'exportPdf'])->name('admin.pdf');
 
+Route::prefix('karyawan')->group(function () {
+    Route::get('/dashboard', [SaleController::class, 'index'])->name('karyawan.index');
+    Route::get('/create', [SaleController::class, 'create'])->name('karyawan.create');
+    Route::post('/', [SaleController::class, 'store'])->name('karyawan.store');
+    Route::get('/{type}/{id}', [SaleController::class, 'show'])->name('karyawan.show');
+    Route::get('/{id}/edit', [SaleController::class, 'edit'])->name('karyawan.edit');
+    Route::put('/{id}', [SaleController::class, 'update'])->name('karyawan.update');
+    Route::get('/sales/{type}/{id}/filter', [SaleController::class, 'filter'])->name('sales.filter');
+    Route::delete('/{id}', [SaleController::class, 'destroy'])->name('karyawan.destroy');
+});
 Route::prefix('admin/materials')->group(function () {
     Route::get('/', [MaterialController::class, 'index'])->name('materials.index');
     Route::get('/create', [MaterialController::class, 'create'])->name('materials.create');
@@ -66,4 +85,11 @@ Route::prefix('admin/paints')->group(function () {
     Route::get('/{id}/edit', [PaintController::class, 'edit'])->name('paints.edit');
     Route::put('/{id}', [PaintController::class, 'update'])->name('paints.update');
     Route::delete('/{id}', [PaintController::class, 'destroy'])->name('paints.destroy');
+});
+Route::prefix('admin/payments')->group(function () {
+    Route::get('/', [PaymentController::class, 'index'])->name('payment.index'); // index
+    Route::post('/', [PaymentController::class, 'store'])->name('payment.store'); // simpan metode baru
+    Route::get('/{payment}/edit', [PaymentController::class, 'edit'])->name('payment.edit');
+    Route::put('/{payment}', [PaymentController::class, 'update'])->name('payment.update');
+    Route::delete('/{payment}', [PaymentController::class, 'destroy'])->name('payment.destroy');
 });

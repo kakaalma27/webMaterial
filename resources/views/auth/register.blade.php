@@ -48,6 +48,17 @@
                         class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="••••••••" required>
                 </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="role">
+                        Register As
+                    </label>
+                    <select id="role" name="role" required
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">-- Select Role --</option>
+                        <option value="0">Pemilik</option>
+                        <option value="1">Karyawan</option>
+                    </select>
+                </div>
 
                 <div class="mb-4">
                     <label class="flex items-center">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales History for {{ $product->name }}</title>
+    <title>Keranjang Belanja</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -20,34 +20,17 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .animate-bounce-custom {
-        animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-10px);
-        }
-    }
-
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
 </head>
 
 <body class="bg-blue-50">
     <div class="min-h-screen">
         <header class="bg-white shadow-md">
-            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
                 <a href="{{ route('karyawan.index') }}">
                     <div class="flex items-center w-14 h-14 space-x-2">
                         <img src="{{ asset('try.png') }}" class="w-15 h-15 text-2xl" alt="">
@@ -142,13 +125,11 @@
                             document.getElementById('updateModal').classList.add('hidden');
                         }
 
-                        // Optional: Close modal when clicking outside
                         window.addEventListener('click', function(e) {
                             const modal = document.getElementById('updateModal');
                             if (e.target === modal) closeModal();
                         });
 
-                        // Real-time image preview
                         document.getElementById('profile_photo_path').addEventListener('change', function(event) {
                             const [file] = event.target.files;
                             if (file) {
@@ -170,136 +151,137 @@
         </header>
 
         <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold text-blue-800 mb-8">Keranjang Belanja</h1>
+
+            @if(session('success') || session('error'))
+            <div id="notification" class="fixed top-5 right-5 max-w-xs w-full px-4 py-3 rounded shadow-lg text-white
+                {{ session('success') ? 'bg-green-500' : 'bg-red-500' }}
+                flex items-center space-x-3 z-50" role="alert">
+                <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    @if(session('success'))
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                    @else
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    @endif
+                </svg>
+                <span class="flex-1 text-sm font-semibold">
+                    {{ session('success') ?? session('error') }}
+                </span>
+                <button onclick="document.getElementById('notification').remove()" class="focus:outline-none"
+                    aria-label="Close notification">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <script>
+            setTimeout(() => {
+                const notif = document.getElementById('notification');
+                if (notif) notif.remove();
+            }, 5000); // Hilang setelah 5000 ms (5 detik)
+            </script>
+            @endif
+
+            @if ($items->isEmpty())
+            <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                <p class="text-gray-500 text-lg">Keranjang belanja Anda kosong. <a href="{{ route('karyawan.index') }}"
+                        class="text-blue-600 hover:underline">Mulai belanja sekarang!</a></p>
+            </div>
+            @else
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 card-hover">
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-xl font-bold text-blue-800">Informasi Produk</h2>
-                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                                    {{ $product->stock > 0 ? 'Tersedia' : 'Habis' }}
-                                </span>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div class="flex flex-col items-center justify-center">
-                                    <img src="{{ asset('storage/' . $product->path) }}" alt=""
-                                        class="w-48 h-48 bg-blue-50 rounded-lg flex items-center justify-center mb-4 animate-bounce-custom object-cover" />
-                                    <h3 class="text-lg font-semibold text-blue-800">{{ $product->name }}</h3>
-                                    <p class="text-gray-500">SKU: {{ $product->id }}</p>
-                                </div>
-
-                                <div class="md:col-span-2">
-                                    <div class="mb-6">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                                        <p class="text-gray-600">{{ $product->description }}</p>
-                                    </div>
-
-                                    <div class="grid grid-cols-2 gap-4 mb-6">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga</label>
-                                            <p class="text-blue-600 font-bold">
-                                                Rp{{ number_format($product->price, 0, ',', '.') }}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
-                                            <p class="text-gray-600">{{ $product->stock }} </p>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                                            <p class="text-gray-600">{{ ucfirst($type) }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="lg:col-span-2 space-y-6">
+                    @foreach ($items as $item)
+                    <div class="bg-white rounded-xl shadow-md p-6 flex items-center space-x-6">
+                        <img src="{{ asset('storage/' . $item->path) }}" alt="{{ $item->name }}"
+                            class="w-24 h-24 object-cover rounded-lg shadow-sm">
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold text-gray-800">{{ $item->name }}</h2>
+                            <p class="text-gray-600">Kategori: {{ ucfirst($item->product_type) }}</p>
+                            <p class="text-lg font-bold text-blue-600 mt-1">
+                                Rp{{ number_format($item->price, 0, ',', '.') }}
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <form action="{{ route('cart.updateQuantity') }}" method="POST" class="flex items-center">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="cart_item_id" value="{{ $item->cart_item_id }}">
+                                <button type="button"
+                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown(); this.parentNode.submit();"
+                                    class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1"
+                                    max="{{ $item->available_stock }}"
+                                    class="w-16 text-center border-t border-b border-gray-300 py-1 mx-1 rounded-md"
+                                    onchange="this.form.submit()">
+                                <button type="button"
+                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp(); this.parentNode.submit();"
+                                    class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </form>
+                            <form action="{{ route('cart.remove') }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="cart_item_id" value="{{ $item->cart_item_id }}">
+                                <button type="submit"
+                                    class="p-2 text-red-600 hover:bg-red-100 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
+                    @endforeach
                 </div>
 
-                <div>
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden h-full card-hover">
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-xl font-bold text-blue-800">Sales History</h2>
-                                <div x-data="{ open: false }" class="relative">
-                                    <button @click="open = !open"
-                                        class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium hover:bg-blue-200">
-                                        <i class="fas fa-filter mr-1"></i> Filter
-                                    </button>
-
-                                    <div x-show="open" x-cloak @click.away="open = false" x-transition
-                                        class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                                        @foreach ($payment as $pay)
-                                        <a href="{{ route('sales.filter', ['type' => $type, 'id' => $product->id, 'payment_id' => $pay->id]) }}"
-                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
-                                            {{ $pay->name }}
-                                        </a>
-                                        @endforeach
-                                        <a href="{{ route('karyawan.show', ['type' => $type, 'id' => $product->id]) }}"
-                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
-                                            Semua
-                                        </a>
-                                    </div>
-                                </div>
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-bold text-blue-800 mb-6">Ringkasan Pesanan</h2>
+                        <div class="space-y-3 mb-6">
+                            @foreach ($items as $item)
+                            <div class="flex justify-between text-gray-700">
+                                <span>{{ $item->name }} ({{ $item->quantity }}x)</span>
+                                <span>Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</span>
                             </div>
-
-                            <div class="mb-6 bg-blue-50 p-3 rounded-lg">
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <h3 class="text-sm font-medium text-gray-500">Total Sales</h3>
-                                        <p class="text-xl font-bold text-blue-600">
-                                            Rp{{ number_format($totalSales, 0, ',', '.') }}
-                                        </p>
-                                    </div>
-                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="max-h-100 overflow-y-auto scrollbar-hide">
-                                <div class="space-y-4">
-                                    @forelse ($salesHistory as $sale)
-                                    <div
-                                        class="flex items-start p-3 border-b border-gray-100 hover:bg-blue-50 rounded-lg transition-colors">
-                                        <div
-                                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-1">
-                                            <i class="fas fa-receipt text-blue-600"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex justify-between">
-                                                <h4 class="font-medium text-gray-800">Order {{ $sale->id }}</h4>
-                                                <span class="text-sm font-bold text-blue-600">
-                                                    Rp{{ number_format($sale->price , 0, ',', '.') }}
-                                                </span>
-                                            </div>
-                                            <p class="text-sm text-gray-500">{{ $sale->quantity }}x {{ $product->name }}
-                                            </p>
-                                            <p class="text-xs text-gray-400 mt-1">
-                                                <i class="far fa-clock mr-1"></i>
-                                                {{ $sale->created_at->diffForHumans() }}
-                                            </p>
-                                            <p class="text-xs text-gray-400 mt-1">
-                                                <i class="fas fa-credit-card mr-1"></i>
-                                                {{ $sale->payment ? $sale->payment->name : 'No payment method' }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    @empty
-                                    <p class="text-gray-500 text-center">No sales history yet.</p>
-                                    @endforelse
-                                </div>
-                                <div class="mt-4">
-                                    {{-- If using paginate, uncomment this --}}
-                                    {{-- {{ $salesHistory->links('pagination::tailwind') }} --}}
-                                </div>
+                            @endforeach
+                            <div
+                                class="border-t border-gray-200 pt-3 flex justify-between text-lg font-bold text-blue-800">
+                                <span>Total:</span>
+                                <span>Rp{{ number_format($totalCartPrice, 0, ',', '.') }}</span>
                             </div>
                         </div>
+
+                        <form action="{{ route('karyawan.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-6">
+                                <label for="payment" class="block text-sm font-medium text-gray-700 mb-1">Metode
+                                    Pembayaran</label>
+                                <select name="payment_id" id="payment" required
+                                    class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    @foreach ($paymentMethods as $payment)
+                                    <option value="{{ $payment->id }}">{{ $payment->name }} - {{ $payment->number }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                <i class="fas fa-money-check-alt mr-2"></i> Lanjutkan Pembayaran
+                            </button>
+                            <a href="{{ route('karyawan.index') }}"
+                                class="w-full inline-block text-center mt-4 px-6 py-3 border border-red-600 text-red-600 font-medium rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i> Lanjutkan Belanja
+                            </a>
+                        </form>
                     </div>
                 </div>
             </div>
+            @endif
         </div>
 
         <footer class="bg-gradient-to-t from-blue-900 to-blue-700 text-white py-8">
@@ -359,15 +341,7 @@
                 </div>
             </div>
         </footer>
-        <script>
-        // No purchase related JS here anymore, it's moved to cart page.
-        // Toggle dropdown for filter remains relevant.
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdown');
-            dropdown.classList.toggle('hidden');
-        }
-        </script>
-
+    </div>
 </body>
 
 </html>

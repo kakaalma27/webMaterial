@@ -40,15 +40,15 @@ Route::get('/admin/history', [PaymentHistoryController::class, 'salesHistory'])-
 Route::get('/admin/export/pdf', [PaymentHistoryController::class, 'exportExcel'])->name('admin.excel');
 Route::get('/admin/export/excel', [PaymentHistoryController::class, 'exportPdf'])->name('admin.pdf');
 
-Route::prefix('karyawan')->group(function () {
-    Route::get('/dashboard', [SaleController::class, 'index'])->name('karyawan.index');
-    Route::get('/create', [SaleController::class, 'create'])->name('karyawan.create');
-    Route::post('/', [SaleController::class, 'store'])->name('karyawan.store');
-    Route::get('/{type}/{id}', [SaleController::class, 'show'])->name('karyawan.show');
-    Route::get('/{id}/edit', [SaleController::class, 'edit'])->name('karyawan.edit');
-    Route::put('/{id}', [SaleController::class, 'update'])->name('karyawan.update');
-    Route::get('/sales/{type}/{id}/filter', [SaleController::class, 'filter'])->name('sales.filter');
-    Route::delete('/{id}', [SaleController::class, 'destroy'])->name('karyawan.destroy');
+Route::group(['middleware' => ['auth']], function () { // Assuming authenticated users for these
+    Route::get('/karyawan', [SaleController::class, 'index'])->name('karyawan.index');
+    Route::post('/cart/add', [SaleController::class, 'addToCart'])->name('cart.add');
+    Route::get('/cart', [SaleController::class, 'showCart'])->name('cart.show');
+    Route::delete('/cart/remove', [SaleController::class, 'removeFromCart'])->name('cart.remove');
+    Route::patch('/cart/update-quantity', [SaleController::class, 'updateCartQuantity'])->name('cart.updateQuantity');
+    Route::post('/checkout', [SaleController::class, 'store'])->name('karyawan.store'); // Renamed from original store to avoid confusion with single item.
+    Route::get('/karyawan/{type}/{id}', [SaleController::class, 'show'])->name('karyawan.show'); // This method will now ONLY show product details and its sales history.
+    Route::get('/sales/filter/{type}/{id}', [SaleController::class, 'filter'])->name('sales.filter');
 });
 Route::prefix('admin/materials')->group(function () {
     Route::get('/', [MaterialController::class, 'index'])->name('materials.index');

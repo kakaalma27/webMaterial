@@ -36,7 +36,6 @@ public function authenticate(Request $request)
             return redirect()->intended('/karyawan/dashboard');
         }
 
-        // Default redirect if role is not 0 or 1
         return redirect()->intended('/');
     }
 

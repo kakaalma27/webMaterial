@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
                 if ($user->role == 0) {
                     return redirect('/admin/dashboard');
                 } elseif ($user->role == 1) {
-                    return redirect('/karyawan/dashboard');
+                    return redirect('/karyawan');
                 }
 
                 return redirect('/');

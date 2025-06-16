@@ -33,7 +33,7 @@ public function authenticate(Request $request)
         if ($user->role == 0) {
             return redirect()->intended('/admin/dashboard');
         } elseif ($user->role == 1) {
-            return redirect()->intended('/karyawan/dashboard');
+            return redirect()->intended('/karyawan');
         }
 
         return redirect()->intended('/');

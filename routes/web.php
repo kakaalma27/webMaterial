@@ -7,6 +7,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaintController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RestockController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\PlumbingController;
 use App\Http\Controllers\ElectricalController;
@@ -49,6 +50,7 @@ Route::group(['middleware' => ['auth']], function () { // Assuming authenticated
     Route::post('/checkout', [SaleController::class, 'store'])->name('karyawan.store'); // Renamed from original store to avoid confusion with single item.
     Route::get('/karyawan/{type}/{id}', [SaleController::class, 'show'])->name('karyawan.show'); // This method will now ONLY show product details and its sales history.
     Route::get('/sales/filter/{type}/{id}', [SaleController::class, 'filter'])->name('sales.filter');
+    Route::get('/karyawan/receipt', [SaleController::class, 'showReceipt'])->name('karyawan.receipt');
 });
 Route::prefix('admin/materials')->group(function () {
     Route::get('/', [MaterialController::class, 'index'])->name('materials.index');
@@ -58,6 +60,16 @@ Route::prefix('admin/materials')->group(function () {
     Route::get('/{id}/edit', [MaterialController::class, 'edit'])->name('materials.edit');
     Route::put('/{id}', [MaterialController::class, 'update'])->name('materials.update');
     Route::delete('/{id}', [MaterialController::class, 'destroy'])->name('materials.destroy');
+});
+Route::prefix('admin/restock')->group(function () {
+    Route::get('/', [RestockController::class, 'index'])->name('restock.index');
+    Route::post('/', [RestockController::class, 'store'])->name('restock.store');
+    Route::put('/{id}', [RestockController::class, 'update'])->name('restock.update');
+    Route::delete('/{id}', [RestockController::class, 'destroy'])->name('restock.destroy');
+    Route::get('/product-details/{type}/{id}', [RestockController::class, 'getProductDetails'])->name('restock.product_details');
+    Route::get('/create', [RestockController::class, 'create'])->name('restock.create');
+    Route::get('/{id}', [RestockController::class, 'show'])->name('restock.show');
+    Route::get('/{id}/edit', [RestockController::class, 'edit'])->name('restock.edit');
 });
 Route::prefix('admin/electricals')->group(function () {
     Route::get('/', [ElectricalController::class, 'index'])->name('electricals.index');

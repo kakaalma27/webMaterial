@@ -50,12 +50,16 @@
                         Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock
                     </th>
+
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color
+                    </th>
+
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
-                    </th>
+                    <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
+                    </th> -->
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -69,6 +73,8 @@
                         <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">{{ $paints->stock }}
                             in stock</span>
                     </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $paints->color ?? '-' }}</td>
+
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         Rp{{ number_format($paints->price, 0, ',', '.') }}
                     </td>
@@ -80,7 +86,7 @@
                         <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">Inactive</span>
                         @endif
                     </td>
-
+                    <!-- 
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <button onclick="openModalEdit('{{ $paints->id }}')"
                             class="text-blue-600 hover:text-blue-900 mr-3">
@@ -96,7 +102,7 @@
                             </button>
                         </form>
 
-                    </td>
+                    </td> -->
                 </tr>
                 <div id="editProductModal-{{ $paints->id }}"
                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -132,6 +138,13 @@
                                 <p class="text-sm text-gray-600 mt-1">Formatted: <span id="editFormattedPrice"
                                         class="font-medium">Rp0</span></p>
                             </div>
+                            <div>
+                                <label for="color" class="block font-medium text-md text-gray-700">Color</label>
+                                <input type="text" name="color" id="color" value="{{ $paints->color }}"
+                                    placeholder="Enter color"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+
                             <div>
                                 <label for="description"
                                     class="block font-medium text-md text-gray-700">Description</label>
@@ -278,6 +291,12 @@
                 <p class="text-sm text-gray-600 mt-1">Formatted: <span id="formattedPrice"
                         class="font-medium">Rp0</span></p>
             </div>
+            <div>
+                <label for="color" class="block font-medium text-md text-gray-700">Color</label>
+                <input type="text" name="color" id="color" placeholder="Enter color (e.g., Red, #FF0000)"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 text-lg focus:border-blue-500 focus:ring-blue-500">
+            </div>
+
             <div>
                 <label for="description" class="block font-medium text-md text-gray-700">Description</label>
                 <textarea name="description" id="description" rows="3" placeholder="Enter product description"

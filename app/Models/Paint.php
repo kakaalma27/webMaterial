@@ -15,6 +15,7 @@ class Paint extends Model
         'price',
         'status',
         'description',
+        'color',
         'path'
     ];
       public function user()

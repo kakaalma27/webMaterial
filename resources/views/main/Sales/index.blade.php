@@ -350,16 +350,15 @@
             <div class="container mx-auto px-4">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
-                        <h3 class="text-xl font-bold mb-4">BuildMaster</h3>
-                        <p class="text-blue-200">Your one-stop shop for all construction and building materials.
-                            Quality
-                            products at competitive prices.</p>
+                        <h3 class="text-xl font-bold mb-4">Toko Bangunan Gaya Baru</h3>
+                        <p class="text-blue-200">Satu langkah kecil untuk kebutuhan rumah tangga kamu untuk
+                            awet sepanjang masa.</p>
                     </div>
                     <div>
                         <h4 class="font-bold mb-4">Quick Links</h4>
                         <div class="mt-4 aspect-w-16 aspect-h-7 w-full rounded-lg overflow-hidden shadow-lg">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.250567675924!2d-122.41941558468128!3d37.7749294797582!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064b1d6f4d1%3A0x6e7b7f1e7f9f7f9f!2sYour%20Location!5e0!3m2!1sen!2sus!4v1678888888888!5m2!1sen!2sus"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4012.7261246235303!2d108.1106294!3d-7.458199599999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e65ffbab6119a4b%3A0xc3368b1c1ac59b2d!2sMIS%20Cihuni!5e1!3m2!1sid!2sid!4v1750166930800!5m2!1sid!2sid"
                                 width="100%" height="auto" style="border:0;" allowfullscreen="" loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
@@ -382,24 +381,25 @@
                         <address class="not-italic">
                             <p class="mb-2">
                                 <i class="fas fa-map-marker-alt mr-2"></i>
-                                <a href="https://maps.app.goo.gl/cBfx5tweRvKUS3L99" target="_blank"
+                                <a href="https://maps.app.goo.gl/1KUwrYJTRp1euzqHA?g_st=aw" target="_blank"
                                     class="hover:underline text-white hover:text-blue-200">
-                                    123 Builder St, Construction City
+                                    kp kubang Rt 002 Rw 001 desa leuwidulang,kecamatan sodonghilir, kabupaten
+                                    tasikmalaya, provinsi jawa Barat
                                 </a>
                             </p>
-                            <p class="mb-2"><i class="fas fa-phone mr-2"></i> (123) 456-7890</p>
-                            <p class="mb-2"><i class="fas fa-envelope mr-2"></i> info@buildmaster.com</p>
+                            <p class="mb-2">
+                                <i class="fas fa-phone mr-2"></i>
+                                <a href="https://wa.me/+6282363328780" target="_blank"
+                                    class="hover:underline text-white hover:text-blue-200">
+                                    +6282363328780
+                                </a>
+                            </p>
+                            <p class="mb-2"><i class="fas fa-envelope mr-2"></i> tb.gayabaru99@gmail.com</p>
                         </address>
-                        <div class="mt-4 flex space-x-4">
-                            <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
                     </div>
                 </div>
                 <div class="border-t border-blue-700 mt-8 pt-6 text-center text-sm text-blue-200">
-                    <p>&copy; 2023 BuildMaster. All rights reserved.</p>
+                    <p>&copy; 2025 Gaya Baru.</p>
                 </div>
             </div>
         </footer>

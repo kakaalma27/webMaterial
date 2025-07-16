@@ -54,8 +54,8 @@
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
-                    </th>
+                    <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
+                    </th> -->
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -81,7 +81,7 @@
                         @endif
                     </td>
 
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <button onclick="openModalEdit('{{ $Material->id }}')"
                             class="text-blue-600 hover:text-blue-900 mr-3">
                             <i class="fas fa-edit"></i>
@@ -95,8 +95,7 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
-
-                    </td>
+                    </td> -->
                 </tr>
                 <div id="editProductModal-{{ $Material->id }}"
                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">

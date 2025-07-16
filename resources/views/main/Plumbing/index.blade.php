@@ -24,9 +24,6 @@
 
     </div>
 </div>
-
-
-
 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Plumbing Management</h2>
@@ -54,8 +51,8 @@
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
-                    </th>
+                    <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
+                    </th> -->
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -81,7 +78,7 @@
                         @endif
                     </td>
 
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <button onclick="openModalEdit('{{ $plumbings->id }}')"
                             class="text-blue-600 hover:text-blue-900 mr-3">
                             <i class="fas fa-edit"></i>
@@ -96,7 +93,7 @@
                             </button>
                         </form>
 
-                    </td>
+                    </td> -->
                 </tr>
                 <div id="editProductModal-{{ $plumbings->id }}"
                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">

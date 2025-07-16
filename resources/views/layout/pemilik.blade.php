@@ -87,8 +87,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="hover:text-blue-200 transition">About</a>
-                <a href="#" class="hover:text-blue-200 transition">Contact</a>
+                <a href="#contact" class="hover:text-blue-200 transition">Contact</a>
             </div>
             <div class="flex items-center space-x-4">
 
@@ -129,13 +128,24 @@
                 </li>
                 <li>
                     <a href="{{ route('admin.history') }}"
-                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('payment.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('admin.history') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 14l2-2 4 4m1-9h.01M6 3h12a1 1 0 011 1v16a1 1 0 01-1.447.894L12 18l-5.553 2.894A1 1 0 015 20V4a1 1 0 011-1z" />
                         </svg>
                         History of Sales
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('restock.index') }}"
+                        class="block px-4 py-2 hover:bg-blue-50 {{ request()->routeIs('restock.*') ? 'text-blue-800 bg-blue-100 font-medium' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 mr-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        ReStock
                     </a>
                 </li>
                 <li>
@@ -219,51 +229,60 @@
             @yield('content')
         </div>
     </div>
-    <footer class="gradient-bg text-white py-8">
+    <footer id="contact" class="bg-gradient-to-t from-blue-900 to-blue-700 text-white py-8">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">BuildMaster</h3>
-                    <p class="text-blue-200">Your one-stop shop for all construction and building materials. Quality
-                        products at competitive prices.</p>
+                    <h3 class="text-xl font-bold mb-4">Toko Bangunan Gaya Baru</h3>
+                    <p class="text-blue-200">Satu langkah kecil untuk kebutuhan rumah tangga kamu untuk
+                        awet sepanjang masa.</p>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-blue-200 transition">Home</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Products</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Categories</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">About Us</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Contact</a></li>
-                    </ul>
+                    <div class="mt-4 aspect-w-16 aspect-h-7 w-full rounded-lg overflow-hidden shadow-lg">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4012.7261246235303!2d108.1106294!3d-7.458199599999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e65ffbab6119a4b%3A0xc3368b1c1ac59b2d!2sMIS%20Cihuni!5e1!3m2!1sid!2sid!4v1750166930800!5m2!1sid!2sid"
+                            width="100%" height="auto" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Categories</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-blue-200 transition">Tools</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Building Materials</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Electrical</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Plumbing</a></li>
-                        <li><a href="#" class="hover:text-blue-200 transition">Paint & Decor</a></li>
+                        <li><a href="{{ route('materials.index') }}"
+                                class="hover:text-blue-200 transition">Materials</a></li>
+                        <li><a href="{{ route('electricals.index') }}"
+                                class="hover:text-blue-200 transition">Electrical</a></li>
+                        <li><a href="{{ route('plumbings.index') }}" class="hover:text-blue-200 transition">Plumbing</a>
+                        </li>
+                        <li><a href="{{ route('paints.index') }}" class="hover:text-blue-200 transition">Paint &
+                                Decor</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Contact Us</h4>
                     <address class="not-italic">
-                        <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> 123 Builder St, Construction City</p>
-                        <p class="mb-2"><i class="fas fa-phone mr-2"></i> (123) 456-7890</p>
-                        <p class="mb-2"><i class="fas fa-envelope mr-2"></i> info@buildmaster.com</p>
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <a href="https://maps.app.goo.gl/1KUwrYJTRp1euzqHA?g_st=aw" target="_blank"
+                                class="hover:underline text-white hover:text-blue-200">
+                                kp kubang Rt 002 Rw 001 desa leuwidulang,kecamatan sodonghilir, kabupaten
+                                tasikmalaya, provinsi jawa Barat
+                            </a>
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone mr-2"></i>
+                            <a href="https://wa.me/+6282363328780" target="_blank"
+                                class="hover:underline text-white hover:text-blue-200">
+                                +6282363328780
+                            </a>
+                        </p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2"></i> tb.gayabaru99@gmail.com</p>
                     </address>
-                    <div class="mt-4 flex space-x-4">
-                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
                 </div>
             </div>
             <div class="border-t border-blue-700 mt-8 pt-6 text-center text-sm text-blue-200">
-                <p>&copy; 2023 BuildMaster. All rights reserved.</p>
+                <p>&copy; 2025 Gaya Baru.</p>
             </div>
         </div>
     </footer>

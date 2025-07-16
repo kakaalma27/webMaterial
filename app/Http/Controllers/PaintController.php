@@ -51,6 +51,7 @@ class PaintController extends Controller
             'price' => 'required|numeric',
             'description' => 'required|string',
             'status' => 'required|boolean',
+            'color' => 'required|string',
             'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -59,6 +60,7 @@ class PaintController extends Controller
         Paint::create([
             'user_id' => $user_id,
             'name' => $validated['name'],
+            'color' => $validated['color'],
             'stock' => $validated['stock'],
             'price' => $validated['price'],
             'description' => $validated['description'],
@@ -87,6 +89,7 @@ class PaintController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string',
+            'color' => 'required|string',
             'stock' => 'required|integer',
             'price' => 'required|numeric',
             'status' => 'required|boolean',
